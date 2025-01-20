@@ -53,10 +53,11 @@ Coming soon!
 
 If other methods fail, you can stop or kill the server.
 The recovery mechanism will resolve any disruptions caused by this action, ensuring that the server restarts as a fully functional TypeDB instance with no corruption.
-
+// ^ Any disruptions - no. An ongoing write query will not be recovered.
 [#commit_interruption]
 == Is it safe to interrupt commits?
 
 Yes.
 Although it is not recommended, interrupting a commit process (e.g., by killing the server) is handled by the recovery mechanism.
-The database will remain in the correct state it was in before the commit, ensuring data integrity.
+~~The database will remain in the correct state it was in before the commit, ensuring data integrity.~~
+// ^It is not guaranteed that the state will be how it was before the commit. Recovery will attempt to commit.

@@ -30,7 +30,7 @@ An `undefine` query removes a function from the schema.
 A `redefine` query updates an existing function in the schema.
 
 === Arithmetic functions
-
+// I don't see a good reason to open with arithmetic functions. It's distracting from the idea that they're meant to be full sub-queries.
 The simplest functions perform arithmetic operations.
 For example, the following query defines a function that accepts two integers and returns their sum.
 The xref:{page-version}@typeql::functions/writing.adoc[function declaration] has several key components:
@@ -58,7 +58,7 @@ include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;fun-s
 ----
 
 === Querying for types
-
+// Are we querying/returning a type or an instance?
 Since TypeDB has a strong emphasis on types, functions can also return types.
 For example, the following function retrieves all `phone` attributes associated with a specific `user`:
 
@@ -68,27 +68,28 @@ For example, the following function retrieves all `phone` attributes associated 
 ----
 include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;fun-stream-return-type]
 ----
-
-=== Functions within functions and tuple outputs
-
-As described in <<#_function_basics, the function syntax basics>>, return statements can include any valid TypeQL expressions.
-This allows functions to call other functions.
-Additionally, multiple expressions can be combined to return a tuple of results instead of a single scalar value.
-
-For example, the following function uses two built-in aggregation function calls to produce a tuple result:
-
-.Tuple function definition with inner function calls
-[,typeql]
-----
-include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;fun-aggregate-single-tuple-return]
-----
-
-[NOTE]
-====
-The output type here is not a stream because each tuple component is derived from an aggregation, which produces a single result.
-====
-
-Refer to <<using_functions>> for more details on calling functions.
+// No. This mixes up reduce returns & function calls.
+// Reducers aren't functions technically since functions can't aggregate across rows.
+// === Functions within functions and tuple outputs
+//
+// As described in <<#_function_basics, the function syntax basics>>, return statements can include any valid TypeQL expressions.
+// This allows functions to call other functions.
+// Additionally, multiple expressions can be combined to return a tuple of results instead of a single scalar value.
+//
+// For example, the following function uses two built-in aggregation function calls to produce a tuple result:
+//
+// .Tuple function definition with inner function calls
+// [,typeql]
+// ----
+// include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;fun-aggregate-single-tuple-return]
+// ----
+//
+// [NOTE]
+// ====
+// The output type here is not a stream because each tuple component is derived from an aggregation, which produces a single result.
+// ====
+//
+// Refer to <<using_functions>> for more details on calling functions.
 
 === Function undefinition
 

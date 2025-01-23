@@ -1,6 +1,6 @@
 = Scalar and tuple functions
 
-Scalar and tuple functions are xref:{page-version}@typeql::functions/index.adoc#fun_types[function types] which return at most one row of outputs.
+Scalar and tuple functions are xref:{page-version}@typeql::functions/index.adoc#fun_types[functions] which return at most one row of outputs.
 
 == Syntax
 

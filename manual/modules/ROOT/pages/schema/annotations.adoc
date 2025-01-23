@@ -33,14 +33,14 @@ TypeDB aims to simplify the complexities of schema declaration and data control 
 [#annotations_constraints]
 === Annotations for constraints definition
 
-Using xref:{page-version}@typeql::annotations/index.adoc[annotations], it's possible to define an unlimited number of cardinality, modality, and value constraints directly in the schema:
+Using xref:{page-version}@typeql::annotations/index.adoc[annotations], it's possible to define cardinality, modality, and value constraints directly in the schema:
 
 [,typeql]
 ----
 include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;entities-annotations;attributes-type-annotations;attributes-value-annotations]
 ----
 
-Try referring to xref:{page-version}@typeql::annotations/index.adoc[TypeQL Annotations] to access the whole list of data constraints available in TypeDB and understanding what each of the annotations above means.
+Refer to xref:{page-version}@typeql::annotations/index.adoc[TypeQL Annotations] to access the whole list of data constraints available in TypeDB and understanding what each of the annotations above means.
 
 .See the details
 [%collapsible]
@@ -51,6 +51,7 @@ Try referring to xref:{page-version}@typeql::annotations/index.adoc[TypeQL Annot
 - `@regex` enforces a format for string data stored in all `email` s in the schema and all `phone` s owned by `user` s.
 - `@unique` enforces all `user` 's `phone` s to have unique values.
 - `@independent` allows storing `language` s without references from owners, preserving this limited (by the number of languages in the world) data for statistics.
+// What does for statistics mean? It came out of the blue. There's also nothing in the schema limiting the number of languages so that also feels out of place.
 ====
 
 By applying annotations, you can ensure that your database not only organizes information but also guarantees its correctness, consistency, and integrity.
@@ -80,11 +81,11 @@ Combining these constraints, the only permissible value is `bob@typedb.com`.
 [#overriding_constraints]
 === Redefining and overriding constraints
 
-A single declaration cannot have multiple constraints **defined** of the same kind, which is also true for xref:{page-version}@typeql::annotations/index.adoc[annotations].
-Constraints and annotations can be <<combining_constraints, combined>> as a result of subtyping and specialization, but a statement like `type @card(X) @card(X) @card(X)` will always result in `type @card(X)`, and `type @card(X) @card(Y)` is an invalid definition.
-A defined annotations, which value should be changed, can be xref:{page-version}@typeql::schema/redefine.adoc[redefined].
+A single declaration cannot have multiple constraints **defined** of the same kind.
+Constraints can be <<combining_constraints, combined>> as a result of subtyping and specialization, but a statement like `type @card(X) @card(X) @card(X)` will always result in `type @card(X)`, and `type @card(X) @card(Y)` is an invalid definition.
+The value of a defined annotations can be changed by xref:{page-version}@typeql::schema/redefine.adoc[redefining] it.
 
-**Overriding** is an operation of hiding a <<default_constraints, default constraint value>> by defining explicit constraints.
+**Overriding** is an operation of hiding a <<default_constraints, default constraint value>> by declaring explicit constraints.
 
 == Annotation kinds
 
@@ -97,7 +98,7 @@ The <<#annotations_constraints, previous example>> contains a number of annotati
 ----
 include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;entities-type-annotations;attributes-type-annotations]
 ----
-
+// Abstract and independent were already explained above. Do we want to redefine them?
 These annotations relate to types as the whole and are generally simple: instances of these types should respect the defined constraints.
 
 .@abstract description
@@ -115,14 +116,12 @@ include::{page-version}@typeql::annotations/independent.adoc[tags=description]
 [#_value_type_annotations]
 === Value type annotations
 
-Value type annotations are similar to <<_type_annotations, type constraints>>, but are set for value types of attribute types:
+Value type annotations constrain the values allowed for an attribute type:
 
 [,typeql]
 ----
 include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;attributes-value-annotations]
 ----
-
-These annotations act similar to type annotations: values of these attributes should respect the defined constraints.
 
 .@regex description
 [%collapsible]
@@ -146,7 +145,7 @@ While <<_type_annotations, type annotations>> and <<_value_type_annotations, val
 - Owners and attributes in `has`.
 - Relations, roles, and roleplayers in `links`.
 
-By defining these annotations, only specific pairs of entities, relations, and attributes are affected or restricted, and you are flexible in combining these annotations to have an elegant and robust schema.
+By defining these annotations, only specific pairs of entities, relations, and attributes are affected or restricted.
 
 .@card description
 [%collapsible]
@@ -180,7 +179,7 @@ The following are the explanations of subtyping behaviour based on the <<_type_a
 ====
 Let's consider an instance of the `user`.
 It should comply to the `abstract` constraints of:
-
+// This section is quite confusing.
 - `content`
 - `page`
 - `profile`
@@ -194,6 +193,7 @@ At the same time, there can not be instances of the mentioned supertypes.
 .@independent description
 [%collapsible]
 ====
+// This is also confusing. Why not say something as simple as "Subtypes of independent attributes must also be independent?"
 Let's consider 2 instances of a `slavic-language sub language`.
 They should comply to the `independent` constraint of the `language`.
 The first attribute is owned by multiple owners, while the second is left unowned.
@@ -201,7 +201,7 @@ The first attribute is owned by multiple owners, while the second is left unowne
 The <<_type_annotations, constraint's description>> allows independent attributes to exist without owners (or restricts the attributes to get deleted without owners).
 Thus, both attributes can exist.
 
-However, the second attribute will get deleted if there will be no `independent` constraints affecting its types.
+However, the second attribute will get deleted if the `independent` constraint was removed.
 ====
 
 === Value type annotations
@@ -241,6 +241,7 @@ include::{page-version}@manual::example$tql/schema.tql[tags=define-keyword;all-o
 It is possible to extend this schema to any direction (e.g., by creating new concrete subtypes of the `page` and the `profile`), so let's describe general rules based on this schema:
 
 - Not any `content` can have a `name`.
+// Unclear that we include subtypes when we say Only `page`s
 - Only `page` s can have a `name`.
 - `page` s generally can have an infinite number of `name` s.
 - A `profile` can have an infinite number of `name` s based on the `page` s constraint.
